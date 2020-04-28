@@ -1,6 +1,6 @@
 {
   "name": "@arkad82x/react-components",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "just a collection of react components for material-ui and formik",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
@@ -37,7 +37,9 @@
     "typescript": "^3.8.3"
   },
   "peerDependencies": {
-    "react": "^16.9.34",
-    "react-dom": "^16.9.7"
+    "react": "16.x",
+    "react-dom": "16.x",
+    "@material-ui/core": "4.x",
+    "@material-ui/icons": "4.x"
   }
 }
