@@ -9,6 +9,8 @@ var MuiButton = _interopDefault(require('@material-ui/core/Button'));
 var CircularProgress = _interopDefault(require('@material-ui/core/CircularProgress'));
 var core = require('@material-ui/core');
 var styles = require('@material-ui/core/styles');
+var formik = require('formik');
+var TextField = _interopDefault(require('@material-ui/core/TextField'));
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -77,7 +79,35 @@ var Button = React.forwardRef(function (_a, ref) {
     }
 });
 Button.defaultProps = {
-    isLoading: false
+    isLoading: false,
+    disabled: false
+};
+
+var TextInput = function (_a) {
+    var name = _a.name, placeholder = _a.placeholder, props = __rest(_a, ["name", "placeholder"]);
+    var _b = formik.useField(name), _c = _b[0], meta = _b[1], value = _c.value, field = __rest(_c, ["value"]);
+    var errorText = meta.error && meta.touched ? meta.error : '';
+    var handleBlur = function (event) {
+        if (props.onBlur) {
+            props.onBlur(event);
+        }
+        field.onBlur(event);
+    };
+    var handleChange = function (event) {
+        if (props.onChange) {
+            props.onChange(event);
+        }
+        field.onChange(event);
+    };
+    return (React.createElement(TextField, __assign({ name: name, placeholder: placeholder, value: value || "", helperText: errorText === "empty" ? "" : errorText, error: !!errorText }, props, { onBlur: handleBlur, onChange: handleChange })));
+};
+TextInput.defaultProps = {
+    placeholder: "",
+    label: "",
+    margin: "normal",
+    inputProps: {},
+    fullWidth: true
 };
 
 exports.Button = Button;
+exports.TextField = TextInput;

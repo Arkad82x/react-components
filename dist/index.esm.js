@@ -3,6 +3,8 @@ import MuiButton from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Tooltip as Tooltip$1, useTheme } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import { useField } from 'formik';
+import TextField from '@material-ui/core/TextField';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -71,7 +73,34 @@ var Button = React.forwardRef(function (_a, ref) {
     }
 });
 Button.defaultProps = {
-    isLoading: false
+    isLoading: false,
+    disabled: false
 };
 
-export { Button };
+var TextInput = function (_a) {
+    var name = _a.name, placeholder = _a.placeholder, props = __rest(_a, ["name", "placeholder"]);
+    var _b = useField(name), _c = _b[0], meta = _b[1], value = _c.value, field = __rest(_c, ["value"]);
+    var errorText = meta.error && meta.touched ? meta.error : '';
+    var handleBlur = function (event) {
+        if (props.onBlur) {
+            props.onBlur(event);
+        }
+        field.onBlur(event);
+    };
+    var handleChange = function (event) {
+        if (props.onChange) {
+            props.onChange(event);
+        }
+        field.onChange(event);
+    };
+    return (React.createElement(TextField, __assign({ name: name, placeholder: placeholder, value: value || "", helperText: errorText === "empty" ? "" : errorText, error: !!errorText }, props, { onBlur: handleBlur, onChange: handleChange })));
+};
+TextInput.defaultProps = {
+    placeholder: "",
+    label: "",
+    margin: "normal",
+    inputProps: {},
+    fullWidth: true
+};
+
+export { Button, TextInput as TextField };

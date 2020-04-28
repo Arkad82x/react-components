@@ -50,7 +50,8 @@ const Button:React.FC<Props> = React.forwardRef(({ color, children, isLoading, d
 })
 
 Button.defaultProps = {
-    isLoading: false
+    isLoading: false,
+    disabled: false
 }
 
 export default Button

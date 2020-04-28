@@ -1,17 +1,22 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { AppBar, Toolbar, Typography, Paper } from '@material-ui/core';
 
-import SendIcon from '@material-ui/icons/Send'
-
-import { Button } from './component-lib'
+import ButtonView from './ButtonView/ButtonView'
 
 function App() {
   return (
-    <div className="App">
-      <h3> Test Component Render below </h3>
-      <Button variant="contained" color="primary" startIcon={<SendIcon />}> Some random text </Button>
-    </div>
+    <>
+      <AppBar position="sticky">
+        <Toolbar>
+          <Typography variant="h6">
+            Components
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <Paper style={{padding:"16px"}}>
+        <ButtonView></ButtonView>
+      </Paper>
+      </>
   );
 }
 
