@@ -1,9 +1,14 @@
 {
-  "name": "react-components",
+  "name": "@arkad82x/react-components",
   "version": "1.0.0",
   "description": "just a collection of react components for material-ui and formik",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
+  "files": "dist",
+  "typings": "dist/index.d.ts",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "scripts": {
     "build": "rollup -c",
     "build-watch": "rollup -c -w",
