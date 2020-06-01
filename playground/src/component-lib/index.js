@@ -123,12 +123,15 @@ var Provider = function (_a) {
     var _b = useState(false), open = _b[0], setOpen = _b[1];
     var _c = useState({ props: {}, content: null }), currentAlert = _c[0], setCurrentAlert = _c[1];
     var handleClose = function () {
+        console.log("close");
         setOpen(false);
     };
     var setAlert = function (content, props) {
-        console.log("setAlert", content, props);
-        setCurrentAlert({ content: content, props: props });
-        setOpen(true);
+        console.log("click: ", { open: open });
+        if (open === false) {
+            setCurrentAlert({ content: content, props: props });
+            setOpen(true);
+        }
     };
     return (React.createElement(AlertContext.Provider, { value: { state: { open: open, currentAlert: currentAlert }, setAlert: setAlert, onClose: handleClose, snackbarProps: snackbarProps, alertProps: alertProps } },
         children,
@@ -136,7 +139,7 @@ var Provider = function (_a) {
 };
 var Alert = function () {
     var _a = useContext(AlertContext), state = _a.state, onClose = _a.onClose, snackbarProps = _a.snackbarProps, alertProps = _a.alertProps;
-    return (React.createElement(Snackbar, __assign({ anchorOrigin: { vertical: "top", horizontal: "right" }, open: state.open, autoHideDuration: 2000, onClose: onClose }, snackbarProps),
+    return (React.createElement(Snackbar, __assign({ anchorOrigin: { vertical: "top", horizontal: "right" }, open: state.open, autoHideDuration: 20000, onClose: onClose }, snackbarProps),
         React.createElement(MuiAlert, __assign({}, alertProps, state.currentAlert.props), state.currentAlert.content)));
 };
 var useAlert = function () {

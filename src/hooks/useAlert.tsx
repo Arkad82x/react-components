@@ -49,9 +49,10 @@ export const Provider: React.FC<ProviderProps> = ({ alertProps, snackbarProps, c
     }
 
     const setAlert = ( content: React.ReactNode | string, props: MuiAlertProps ) => {
-        console.log("setAlert", content, props)
-        setCurrentAlert({content, props})
-        setOpen(true)
+        if(open === false) {
+            setCurrentAlert({content, props})
+            setOpen(true)
+        }
     }
 
     return (
@@ -73,7 +74,7 @@ const Alert: React.FC<AlertProps> = () => {
         <Snackbar
             anchorOrigin={{ vertical: "top", horizontal: "right" }}
             open={state.open}
-            autoHideDuration={2000}
+            autoHideDuration={20000}
             onClose={onClose}
             {...snackbarProps}>
             <MuiAlert {...alertProps} {...state.currentAlert.props}>
