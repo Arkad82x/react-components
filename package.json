@@ -45,6 +45,7 @@
   },
   "dependencies": {
     "@material-ui/core": "^4.9.12",
+    "@material-ui/lab": "^4.0.0-alpha.54",
     "formik": "^2.1.4"
   }
 }

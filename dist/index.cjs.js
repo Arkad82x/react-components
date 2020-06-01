@@ -4,13 +4,15 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
-var React = _interopDefault(require('react'));
+var React = require('react');
+var React__default = _interopDefault(React);
 var MuiButton = _interopDefault(require('@material-ui/core/Button'));
 var CircularProgress = _interopDefault(require('@material-ui/core/CircularProgress'));
 var core = require('@material-ui/core');
 var styles = require('@material-ui/core/styles');
 var formik = require('formik');
 var TextField = _interopDefault(require('@material-ui/core/TextField'));
+var MuiAlert = _interopDefault(require('@material-ui/lab/Alert'));
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -60,19 +62,19 @@ var Tooltip = styles.withStyles(function (theme) { return ({
     },
 }); })(core.Tooltip);
 
-var Button = React.forwardRef(function (_a, ref) {
+var Button = React__default.forwardRef(function (_a, ref) {
     var color = _a.color, children = _a.children, isLoading = _a.isLoading, disabled = _a.disabled, startIcon = _a.startIcon, tooltip = _a.tooltip, disabledTooltip = _a.disabledTooltip, props = __rest(_a, ["color", "children", "isLoading", "disabled", "startIcon", "tooltip", "disabledTooltip"]);
     var palette = core.useTheme().palette;
-    var ButtonElement = React.createElement(MuiButton, __assign({ color: color, startIcon: isLoading ?
-            React.createElement(CircularProgress, { size: 20, style: { color: color && palette[color].contrastText } })
+    var ButtonElement = React__default.createElement(MuiButton, __assign({ color: color, startIcon: isLoading ?
+            React__default.createElement(CircularProgress, { size: 20, style: { color: color && palette[color].contrastText } })
             : startIcon, disabled: isLoading || disabled, ref: ref }, props), children);
     if (tooltip && disabled === false) {
-        return (React.createElement(Tooltip, { enterDelay: 500, title: tooltip, arrow: true }, ButtonElement));
+        return (React__default.createElement(Tooltip, { enterDelay: 500, title: tooltip, arrow: true }, ButtonElement));
     }
     if (disabledTooltip && disabled === true) {
         //wrapper needed because disabled buttons do not fire userinteraction events
-        return (React.createElement(Tooltip, { title: disabledTooltip, arrow: true },
-            React.createElement("div", { style: { display: "unset" } }, ButtonElement)));
+        return (React__default.createElement(Tooltip, { title: disabledTooltip, arrow: true },
+            React__default.createElement("div", { style: { display: "unset" } }, ButtonElement)));
     }
     else {
         return ButtonElement;
@@ -99,7 +101,7 @@ var TextInput = function (_a) {
         }
         field.onChange(event);
     };
-    return (React.createElement(TextField, __assign({ name: name, placeholder: placeholder, value: value || "", helperText: errorText === "empty" ? "" : errorText, error: !!errorText }, props, { onBlur: handleBlur, onChange: handleChange })));
+    return (React__default.createElement(TextField, __assign({ name: name, placeholder: placeholder, value: value || "", helperText: errorText === "empty" ? "" : errorText, error: !!errorText }, props, { onBlur: handleBlur, onChange: handleChange })));
 };
 TextInput.defaultProps = {
     placeholder: "",
@@ -109,5 +111,63 @@ TextInput.defaultProps = {
     fullWidth: true
 };
 
+var AlertContext = React__default.createContext({
+    state: {
+        open: false,
+        currentAlert: {
+            props: {},
+            content: null
+        }
+    },
+    setAlert: function (content, severity) { },
+    onClose: function () { },
+    snackbarProps: {},
+    alertProps: {}
+});
+var Provider = function (_a) {
+    var alertProps = _a.alertProps, snackbarProps = _a.snackbarProps, children = _a.children;
+    var _b = React.useState(false), open = _b[0], setOpen = _b[1];
+    var _c = React.useState({ props: {}, content: null }), currentAlert = _c[0], setCurrentAlert = _c[1];
+    var handleClose = function () {
+        setOpen(false);
+    };
+    var setAlert = function (content, props) {
+        console.log("setAlert", content, props);
+        setCurrentAlert({ content: content, props: props });
+        setOpen(true);
+    };
+    return (React__default.createElement(AlertContext.Provider, { value: { state: { open: open, currentAlert: currentAlert }, setAlert: setAlert, onClose: handleClose, snackbarProps: snackbarProps, alertProps: alertProps } },
+        children,
+        React__default.createElement(Alert, null)));
+};
+var Alert = function () {
+    var _a = React.useContext(AlertContext), state = _a.state, onClose = _a.onClose, snackbarProps = _a.snackbarProps, alertProps = _a.alertProps;
+    return (React__default.createElement(core.Snackbar, __assign({ anchorOrigin: { vertical: "top", horizontal: "right" }, open: state.open, autoHideDuration: 2000, onClose: onClose }, snackbarProps),
+        React__default.createElement(MuiAlert, __assign({}, alertProps, state.currentAlert.props), state.currentAlert.content)));
+};
+var useAlert = function () {
+    var setAlert = React__default.useContext(AlertContext).setAlert;
+    var alertSuccess = function (content, props) {
+        setAlert(content, __assign(__assign({}, props), { severity: "success" }));
+    };
+    var alertError = function (content, props) {
+        setAlert(content, __assign(__assign({}, props), { severity: "error" }));
+    };
+    var alertWarning = function (content, props) {
+        setAlert(content, __assign(__assign({}, props), { severity: "warning" }));
+    };
+    var alertInfo = function (content, props) {
+        setAlert(content, __assign(__assign({}, props), { severity: "info" }));
+    };
+    return {
+        alertSuccess: alertSuccess,
+        alertError: alertError,
+        alertWarning: alertWarning,
+        alertInfo: alertInfo
+    };
+};
+
+exports.AlertProvider = Provider;
 exports.Button = Button;
 exports.TextField = TextInput;
+exports.useAlert = useAlert;

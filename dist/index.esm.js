@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import MuiButton from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { Tooltip as Tooltip$1, useTheme } from '@material-ui/core';
+import { Tooltip as Tooltip$1, useTheme, Snackbar } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { useField } from 'formik';
 import TextField from '@material-ui/core/TextField';
+import MuiAlert from '@material-ui/lab/Alert';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -103,4 +104,60 @@ TextInput.defaultProps = {
     fullWidth: true
 };
 
-export { Button, TextInput as TextField };
+var AlertContext = React.createContext({
+    state: {
+        open: false,
+        currentAlert: {
+            props: {},
+            content: null
+        }
+    },
+    setAlert: function (content, severity) { },
+    onClose: function () { },
+    snackbarProps: {},
+    alertProps: {}
+});
+var Provider = function (_a) {
+    var alertProps = _a.alertProps, snackbarProps = _a.snackbarProps, children = _a.children;
+    var _b = useState(false), open = _b[0], setOpen = _b[1];
+    var _c = useState({ props: {}, content: null }), currentAlert = _c[0], setCurrentAlert = _c[1];
+    var handleClose = function () {
+        setOpen(false);
+    };
+    var setAlert = function (content, props) {
+        console.log("setAlert", content, props);
+        setCurrentAlert({ content: content, props: props });
+        setOpen(true);
+    };
+    return (React.createElement(AlertContext.Provider, { value: { state: { open: open, currentAlert: currentAlert }, setAlert: setAlert, onClose: handleClose, snackbarProps: snackbarProps, alertProps: alertProps } },
+        children,
+        React.createElement(Alert, null)));
+};
+var Alert = function () {
+    var _a = useContext(AlertContext), state = _a.state, onClose = _a.onClose, snackbarProps = _a.snackbarProps, alertProps = _a.alertProps;
+    return (React.createElement(Snackbar, __assign({ anchorOrigin: { vertical: "top", horizontal: "right" }, open: state.open, autoHideDuration: 2000, onClose: onClose }, snackbarProps),
+        React.createElement(MuiAlert, __assign({}, alertProps, state.currentAlert.props), state.currentAlert.content)));
+};
+var useAlert = function () {
+    var setAlert = React.useContext(AlertContext).setAlert;
+    var alertSuccess = function (content, props) {
+        setAlert(content, __assign(__assign({}, props), { severity: "success" }));
+    };
+    var alertError = function (content, props) {
+        setAlert(content, __assign(__assign({}, props), { severity: "error" }));
+    };
+    var alertWarning = function (content, props) {
+        setAlert(content, __assign(__assign({}, props), { severity: "warning" }));
+    };
+    var alertInfo = function (content, props) {
+        setAlert(content, __assign(__assign({}, props), { severity: "info" }));
+    };
+    return {
+        alertSuccess: alertSuccess,
+        alertError: alertError,
+        alertWarning: alertWarning,
+        alertInfo: alertInfo
+    };
+};
+
+export { Provider as AlertProvider, Button, TextInput as TextField, useAlert };
