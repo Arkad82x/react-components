@@ -123,11 +123,9 @@ var Provider = function (_a) {
     var _b = useState(false), open = _b[0], setOpen = _b[1];
     var _c = useState({ props: {}, content: null }), currentAlert = _c[0], setCurrentAlert = _c[1];
     var handleClose = function () {
-        console.log("close");
         setOpen(false);
     };
     var setAlert = function (content, props) {
-        console.log("click: ", { open: open });
         if (open === false) {
             setCurrentAlert({ content: content, props: props });
             setOpen(true);
