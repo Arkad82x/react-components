@@ -74,7 +74,7 @@ const Alert: React.FC<AlertProps> = () => {
         <Snackbar
             anchorOrigin={{ vertical: "top", horizontal: "right" }}
             open={state.open}
-            autoHideDuration={20000}
+            autoHideDuration={2000}
             onClose={onClose}
             {...snackbarProps}>
             <MuiAlert {...alertProps} {...state.currentAlert.props}>
