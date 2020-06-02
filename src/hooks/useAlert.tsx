@@ -38,7 +38,7 @@ type ProviderProps = {
     children: React.ReactNode
 }
 
-export const Provider: React.FC<ProviderProps> = ({ alertProps, snackbarProps, children }) => {
+export const AlertProvider: React.FC<ProviderProps> = ({ alertProps, snackbarProps, children }) => {
     const [ open, setOpen ] = useState<boolean>(false)
     const [ currentAlert, setCurrentAlert ] = useState<{
         props: MuiAlertProps,
@@ -90,7 +90,7 @@ const Alert: React.FC<AlertProps> = () => {
     )
 }
 
-const useAlert = () => {
+export const useAlert = () => {
     const { setAlert } = React.useContext(AlertContext)
 
     const alertSuccess = (content: React.ReactNode | string, props?: MuiAlertProps) => {
@@ -118,5 +118,3 @@ const useAlert = () => {
         }
     }
 }
-
-export default useAlert

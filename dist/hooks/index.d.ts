@@ -1,1 +1,2 @@
-export { default as useAlert, Provider as AlertProvider } from './useAlert';
+export { useAlert, AlertProvider } from './useAlert';
+export { useDialog, DialogProvider, DialogExtraProps } from './useDialog';

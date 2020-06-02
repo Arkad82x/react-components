@@ -125,7 +125,7 @@ var AlertContext = React__default.createContext({
     snackbarProps: {},
     alertProps: {}
 });
-var Provider = function (_a) {
+var AlertProvider = function (_a) {
     var alertProps = _a.alertProps, snackbarProps = _a.snackbarProps, children = _a.children;
     var _b = React.useState(false), open = _b[0], setOpen = _b[1];
     var _c = React.useState({ props: {}, content: null }), currentAlert = _c[0], setCurrentAlert = _c[1];
@@ -172,7 +172,62 @@ var useAlert = function () {
     };
 };
 
-exports.AlertProvider = Provider;
+var DialogContext = React__default.createContext({
+    openDialog: function () { }
+});
+function DialogProvider(props) {
+    var children = props.children;
+    var _a = React.useState({
+        open: false,
+        props: {},
+        DialogComponent: function () { return null; },
+        successCallback: function () { },
+        errorCallback: function () { }
+    }), state = _a[0], setState = _a[1];
+    var openDialog = function (DialogComponent, props, successCallback, errorCallback) {
+        setState({
+            open: true,
+            props: props,
+            DialogComponent: DialogComponent,
+            successCallback: successCallback,
+            errorCallback: errorCallback
+        });
+    };
+    function onClose(response) {
+        state.successCallback(response);
+        setState(__assign(__assign({}, state), { open: false }));
+    }
+    var onCancel = function (response) {
+        state.errorCallback(response);
+        setState(__assign(__assign({}, state), { open: false }));
+    };
+    var DialogComponent = state.DialogComponent;
+    return (React__default.createElement(DialogContext.Provider, { value: { openDialog: openDialog } },
+        children,
+        React__default.createElement(DialogComponent, __assign({ open: state.open, onClose: onClose, onCancel: onCancel }, state.props))));
+}
+var useDialog = function () {
+    var openDialog = React__default.useContext(DialogContext).openDialog;
+    var show = function (_a) {
+        var component = _a.component, props = _a.props;
+        return new Promise(function (res, rej) {
+            openDialog(component, props, function (response) {
+                res(response);
+            }, function (response) {
+                rej(response);
+            });
+        });
+    };
+    return {
+        dialog: {
+            show: show
+        }
+    };
+};
+
+exports.AlertProvider = AlertProvider;
 exports.Button = Button;
+exports.DialogProvider = DialogProvider;
 exports.TextField = TextInput;
 exports.useAlert = useAlert;
+exports.useDialog = useDialog;

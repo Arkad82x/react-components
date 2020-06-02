@@ -1,18 +1,34 @@
 import React from 'react'
-import { Tabs, Tab, AppBar } from '@material-ui/core'
+import { Grid, Paper, Typography, makeStyles } from '@material-ui/core'
 import TabPanel from '../../TabPanel'
 import UseAlert from './UseAlert';
+import UseDialog from './UseDialog'
+
+const useStyles = makeStyles(() => ({
+    paper: {
+        padding: "16px"
+    }
+}))
 
 export default () => {
     const [currentTab, setCurrentTab] = React.useState(0)
+    const classes = useStyles()
     return (
-        <>
-            <Tabs value={currentTab} onChange={(e, newValue) => setCurrentTab(newValue)}>
-                <Tab label="Alert" />
-            </Tabs>
-            <TabPanel value={currentTab} index={0}>
+        <Grid container direction="column" spacing={4}>
+            <Grid item>
+
+            <Paper className={classes.paper}>
+                <Typography variant="h4">Alerts</Typography>
                 <UseAlert />
-            </TabPanel>
-        </>
+            </Paper>
+            </Grid>
+            <Grid item>
+
+            <Paper className={classes.paper}>
+                <Typography variant="h4">Dialogs</Typography>
+                <UseDialog />
+            </Paper>
+            </Grid>
+        </Grid>
     )
 }

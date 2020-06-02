@@ -6,8 +6,8 @@ declare type ProviderProps = {
     snackbarProps?: Exclude<SnackbarProps, "onClose" | "open">;
     children: React.ReactNode;
 };
-export declare const Provider: React.FC<ProviderProps>;
-declare const useAlert: () => {
+export declare const AlertProvider: React.FC<ProviderProps>;
+export declare const useAlert: () => {
     showAlert: {
         success: (content: React.ReactNode, props?: MuiAlertProps | undefined) => void;
         error: (content: React.ReactNode, props?: MuiAlertProps | undefined) => void;
@@ -15,4 +15,4 @@ declare const useAlert: () => {
         info: (content: React.ReactNode, props?: MuiAlertProps | undefined) => void;
     };
 };
-export default useAlert;
+export {};
