@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react'
-import { Snackbar, SnackbarProps } from '@material-ui/core'
+import { IconButton, Snackbar, SnackbarProps } from '@material-ui/core'
 import MuiAlert, { AlertProps as MuiAlertProps } from '@material-ui/lab/Alert'
+import CloseIcon from '@material-ui/icons/Close' 
 
 
 type ContextProps = {
@@ -77,7 +78,11 @@ const Alert: React.FC<AlertProps> = () => {
             autoHideDuration={2000}
             onClose={onClose}
             {...snackbarProps}>
-            <MuiAlert {...alertProps} {...state.currentAlert.props}>
+            <MuiAlert {...alertProps} {...state.currentAlert.props} action={
+                <IconButton size="small" aria-label="close" color="inherit" onClick={onClose}>
+                    <CloseIcon fontSize="small" />
+                </IconButton>
+            }>
                 { state.currentAlert.content}
             </MuiAlert>
         </Snackbar>
@@ -105,10 +110,12 @@ const useAlert = () => {
     }
 
     return {
-        alertSuccess,
-        alertError,
-        alertWarning,
-        alertInfo
+        showAlert: {
+            success: alertSuccess,
+            error: alertError,
+            warning: alertWarning,
+            info: alertInfo
+        }
     }
 }
 

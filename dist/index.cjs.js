@@ -13,6 +13,7 @@ var styles = require('@material-ui/core/styles');
 var formik = require('formik');
 var TextField = _interopDefault(require('@material-ui/core/TextField'));
 var MuiAlert = _interopDefault(require('@material-ui/lab/Alert'));
+var CloseIcon = _interopDefault(require('@material-ui/icons/Close'));
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -129,11 +130,9 @@ var Provider = function (_a) {
     var _b = React.useState(false), open = _b[0], setOpen = _b[1];
     var _c = React.useState({ props: {}, content: null }), currentAlert = _c[0], setCurrentAlert = _c[1];
     var handleClose = function () {
-        console.log("close");
         setOpen(false);
     };
     var setAlert = function (content, props) {
-        console.log("click: ", { open: open });
         if (open === false) {
             setCurrentAlert({ content: content, props: props });
             setOpen(true);
@@ -145,8 +144,9 @@ var Provider = function (_a) {
 };
 var Alert = function () {
     var _a = React.useContext(AlertContext), state = _a.state, onClose = _a.onClose, snackbarProps = _a.snackbarProps, alertProps = _a.alertProps;
-    return (React__default.createElement(core.Snackbar, __assign({ anchorOrigin: { vertical: "top", horizontal: "right" }, open: state.open, autoHideDuration: 20000, onClose: onClose }, snackbarProps),
-        React__default.createElement(MuiAlert, __assign({}, alertProps, state.currentAlert.props), state.currentAlert.content)));
+    return (React__default.createElement(core.Snackbar, __assign({ anchorOrigin: { vertical: "top", horizontal: "right" }, open: state.open, autoHideDuration: 2000, onClose: onClose }, snackbarProps),
+        React__default.createElement(MuiAlert, __assign({}, alertProps, state.currentAlert.props, { action: React__default.createElement(core.IconButton, { size: "small", "aria-label": "close", color: "inherit", onClick: onClose },
+                React__default.createElement(CloseIcon, { fontSize: "small" })) }), state.currentAlert.content)));
 };
 var useAlert = function () {
     var setAlert = React__default.useContext(AlertContext).setAlert;
@@ -163,10 +163,12 @@ var useAlert = function () {
         setAlert(content, __assign(__assign({}, props), { severity: "info" }));
     };
     return {
-        alertSuccess: alertSuccess,
-        alertError: alertError,
-        alertWarning: alertWarning,
-        alertInfo: alertInfo
+        showAlert: {
+            success: alertSuccess,
+            error: alertError,
+            warning: alertWarning,
+            info: alertInfo
+        }
     };
 };
 

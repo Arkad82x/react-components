@@ -8,9 +8,11 @@ declare type ProviderProps = {
 };
 export declare const Provider: React.FC<ProviderProps>;
 declare const useAlert: () => {
-    alertSuccess: (content: React.ReactNode, props?: MuiAlertProps | undefined) => void;
-    alertError: (content: React.ReactNode, props?: MuiAlertProps | undefined) => void;
-    alertWarning: (content: React.ReactNode, props?: MuiAlertProps | undefined) => void;
-    alertInfo: (content: React.ReactNode, props?: MuiAlertProps | undefined) => void;
+    showAlert: {
+        success: (content: React.ReactNode, props?: MuiAlertProps | undefined) => void;
+        error: (content: React.ReactNode, props?: MuiAlertProps | undefined) => void;
+        warning: (content: React.ReactNode, props?: MuiAlertProps | undefined) => void;
+        info: (content: React.ReactNode, props?: MuiAlertProps | undefined) => void;
+    };
 };
 export default useAlert;
