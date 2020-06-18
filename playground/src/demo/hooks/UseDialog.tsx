@@ -1,46 +1,14 @@
 import React from 'react'
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core'
-import { useDialog, DialogProvider, Button, DialogExtraProps } from '../../component-lib'
-
-type DialogResponse = {
-    reason: "clickOutside" | undefined,
-    action: "reload" | undefined,
-    payload: any 
-} | undefined
-
-type MyDialogProps = {
-    sampleText: string
-}
-
-const MyDialog: React.FC<MyDialogProps & DialogExtraProps<DialogResponse>> = ({ open, onClose, onCancel, sampleText }) => {
-
-    const handleClose = () => {
-        onClose()
-    }
-
-    const handleCancel = () => {
-        onCancel()
-    }
-
-    return (
-        <Dialog open={open} onClose={handleClose}>
-            <DialogTitle>Example Title</DialogTitle>
-            <DialogContent>
-                <DialogContentText>{ sampleText }</DialogContentText>
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={handleCancel}>Cancel</Button>
-                <Button onClick={handleClose}>Submit</Button>
-            </DialogActions>
-        </Dialog>
-    )
-}
+import { Button } from '../../component-lib'
+import { useDialog, DialogProvider } from './dummy'
+import MyDialog, { Response as DialogResponse, Props as DialogProps } from './MyDialog'
 
 const UseDialog = () => {
-    const { dialog } = useDialog<DialogResponse>()
+    const { dialog } = useDialog()
 
     const handleClick = () => {
-        dialog.show<MyDialogProps>({
+        dialog.show<DialogProps>({
             component: MyDialog,
             props: {
                 sampleText: "foobar"
@@ -60,8 +28,9 @@ const UseDialog = () => {
 }
 
 const Wrapper = () => {
+
     return (
-        <DialogProvider<DialogResponse>>
+        <DialogProvider>
             <UseDialog></UseDialog>
         </DialogProvider>
     )
