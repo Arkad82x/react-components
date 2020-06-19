@@ -1,2 +1,2 @@
 export { useAlert, AlertProvider } from './useAlert';
-export { useDialog, DialogProvider, DialogExtraProps } from './useDialog';
+export { useDialog, DialogProvider, DialogProps } from './useDialog';

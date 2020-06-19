@@ -1,5 +1,5 @@
 import React from 'react'
-import { DialogProps } from './dummy'
+import { DialogProps } from '../../component-lib'
 
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@material-ui/core'
 

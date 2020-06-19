@@ -1,6 +1,5 @@
 import React from 'react'
-import { Button } from '../../component-lib'
-import { useDialog, DialogProvider } from './dummy'
+import { useDialog, DialogProvider, Button } from '../../component-lib'
 import MyDialog, { Response as DialogResponse, Props as DialogProps } from './MyDialog'
 
 const UseDialog = () => {

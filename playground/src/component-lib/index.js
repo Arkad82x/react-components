@@ -138,7 +138,7 @@ var AlertProvider = function (_a) {
 };
 var Alert = function () {
     var _a = useContext(AlertContext), state = _a.state, onClose = _a.onClose, snackbarProps = _a.snackbarProps, alertProps = _a.alertProps;
-    return (React.createElement(Snackbar, __assign({ anchorOrigin: { vertical: "top", horizontal: "right" }, open: state.open, autoHideDuration: 2000, onClose: onClose }, snackbarProps),
+    return (React.createElement(Snackbar, __assign({ anchorOrigin: { vertical: "top", horizontal: "right" }, autoHideDuration: 2000 }, snackbarProps, { onClose: onClose, open: state.open }),
         React.createElement(MuiAlert, __assign({}, alertProps, state.currentAlert.props, { action: React.createElement(IconButton, { size: "small", "aria-label": "close", color: "inherit", onClick: onClose },
                 React.createElement(CloseIcon, { fontSize: "small" })) }), state.currentAlert.content)));
 };
