@@ -157,7 +157,7 @@ var useAlert = function () {
         setAlert(content, __assign(__assign({}, props), { severity: "info" }));
     };
     return {
-        showAlert: {
+        alert: {
             success: alertSuccess,
             error: alertError,
             warning: alertWarning,
@@ -167,50 +167,46 @@ var useAlert = function () {
 };
 
 var DialogContext = React.createContext({
-    openDialog: function () { }
+    openDialog: function (dialog, props) { return Promise.resolve(); }
 });
-function DialogProvider(props) {
-    var children = props.children;
-    var _a = useState({
-        open: false,
+var DialogProvider = function (_a) {
+    var children = _a.children;
+    var _b = useState({
+        component: function () { return null; },
         props: {},
-        DialogComponent: function () { return null; },
-        successCallback: function () { },
-        errorCallback: function () { }
-    }), state = _a[0], setState = _a[1];
-    var openDialog = function (DialogComponent, props, successCallback, errorCallback) {
-        setState({
-            open: true,
-            props: props,
-            DialogComponent: DialogComponent,
-            successCallback: successCallback,
-            errorCallback: errorCallback
+        open: false,
+        resolve: function () { },
+        reject: function () { }
+    }), state = _b[0], setState = _b[1];
+    var openDialog = function (dialog, props) {
+        return new Promise(function (resolve, reject) {
+            setState({
+                component: dialog,
+                props: props,
+                open: true,
+                resolve: resolve,
+                reject: reject
+            });
         });
     };
-    function onClose(response) {
-        state.successCallback(response);
-        setState(__assign(__assign({}, state), { open: false }));
-    }
-    var onCancel = function (response) {
-        state.errorCallback(response);
-        setState(__assign(__assign({}, state), { open: false }));
+    var onClose = function (response) {
+        state.resolve(response);
+        setState(__assign(__assign({}, state), { open: false, resolve: function () { }, reject: function () { } }));
     };
-    var DialogComponent = state.DialogComponent;
+    var onError = function (error) {
+        state.reject(error);
+        setState(__assign(__assign({}, state), { open: false, resolve: function () { }, reject: function () { } }));
+    };
+    var DialogComponent = state.component;
     return (React.createElement(DialogContext.Provider, { value: { openDialog: openDialog } },
         children,
-        React.createElement(DialogComponent, __assign({ open: state.open, onClose: onClose, onCancel: onCancel }, state.props))));
-}
+        state.component && React.createElement(DialogComponent, __assign({}, state.props, { open: state.open, onClose: onClose, onError: onError }))));
+};
 var useDialog = function () {
     var openDialog = React.useContext(DialogContext).openDialog;
     var show = function (_a) {
         var component = _a.component, props = _a.props;
-        return new Promise(function (res, rej) {
-            openDialog(component, props, function (response) {
-                res(response);
-            }, function (response) {
-                rej(response);
-            });
-        });
+        return openDialog(component, props);
     };
     return {
         dialog: {

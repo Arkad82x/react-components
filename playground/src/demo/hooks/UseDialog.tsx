@@ -1,5 +1,4 @@
 import React from 'react'
-import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core'
 import { Button } from '../../component-lib'
 import { useDialog, DialogProvider } from './dummy'
 import MyDialog, { Response as DialogResponse, Props as DialogProps } from './MyDialog'
@@ -28,7 +27,6 @@ const UseDialog = () => {
 }
 
 const Wrapper = () => {
-
     return (
         <DialogProvider>
             <UseDialog></UseDialog>

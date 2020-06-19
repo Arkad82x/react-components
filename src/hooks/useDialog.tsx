@@ -1,90 +1,67 @@
 import React, { useState } from 'react'
 
-
-type ProviderProps = {
-    children: React.ReactNode
-}
-
-export type DialogExtraProps<DialogResponse> = {
+export type DialogProps = {
     open: boolean,
-    onClose: ( response?: DialogResponse ) => void,
-    onCancel: ( response?: DialogResponse ) => void
+    onClose: () => void,
+    onError: () => void
 }
 
-type ContextProps<DialogResponse> = {
-    openDialog: <P>( DialogComponent: React.FC<P & DialogExtraProps<DialogResponse>>, props: P, successCallback: (response?: DialogResponse) => void, errorCallback: (response?: DialogResponse) => void ) => void
-}
-
-const DialogContext = React.createContext<ContextProps<any>>({
-    openDialog: () => {}
+const DialogContext = React.createContext({
+    openDialog: (dialog: React.FC<any>, props: {}) => Promise.resolve()
 })
 
-export function DialogProvider<DialogResponse>(props: ProviderProps) {
-    const { children } = props
+export const DialogProvider: React.FC<{}> = ({ children }) => {
     const [ state, setState ] = useState<{
-        open: boolean,
-        props: any,
-        DialogComponent: React.FC<any>,
-        successCallback: ( response?: DialogResponse) => void,
-        errorCallback: (response?: DialogResponse) => void
-    }>({
-        open: false,
+        component: React.FC<any>,
         props: {},
-        DialogComponent: () => null,
-        successCallback: () => {},
-        errorCallback: () => {}
+        open: boolean,
+        resolve: (response:any) => void,
+        reject: (error: any) => void
+    }>({
+        component: () => null,
+        props: {},
+        open: false,
+        resolve: () => {},
+        reject: () => {} 
     })
 
-
-
-    const openDialog = <P extends any>(DialogComponent: React.FC<P & DialogExtraProps<DialogResponse>>, props: P, successCallback: (response?: DialogResponse) => void, errorCallback: (response?: DialogResponse) => void): void => {
-        setState({
-            open: true,
-            props,
-            DialogComponent,
-            successCallback,
-            errorCallback
+    const openDialog = (dialog: React.FC<any>, props: {}): Promise<any> => {
+        return new Promise((resolve, reject) => {
+            setState({
+                component: dialog,
+                props,
+                open:true,
+                resolve,
+                reject
+            })
         })
     }
 
-    function onClose (response?: DialogResponse){
-        state.successCallback(response)
-        setState({
-            ...state,
-            open: false
-        })
+    const onClose = (response: any) => {
+        state.resolve(response)
+        setState({ ...state, open: false, resolve: () => {}, reject: () => {} })
     }
 
-    const onCancel = (response?: DialogResponse) => {
-        state.errorCallback(response)
-        setState({
-            ...state,
-            open: false
-        })
-
+    const onError = (error: any) => {
+        state.reject(error)
+        setState({ ...state, open: false, resolve: () => {}, reject: () => {} })
     }
 
-    const DialogComponent = state.DialogComponent
+    const DialogComponent = state.component
 
     return (
         <DialogContext.Provider value={{openDialog}} >
             {children}
-            <DialogComponent open={state.open} onClose={onClose} onCancel={onCancel} {...state.props}/>
+            {state.component && <DialogComponent {...state.props} open={state.open} onClose={onClose} onError={onError} />}
         </DialogContext.Provider>
     )
 }
 
-export const useDialog = <DialogResponse extends any>() => {
+export const useDialog = () => {
     const { openDialog } = React.useContext(DialogContext)
 
-    const show = <P extends any>({ component, props}: {component: React.FC<P & DialogExtraProps<DialogResponse>>, props: P}): Promise<any> => {
-        return new Promise((res, rej) => {
-            openDialog<P>(component, props, (response?) => {
-                res(response)
-            }, (response?) => {
-                rej(response)
-            })
-        })
+    const show = <P extends any>({component, props}: {component: React.FC<any>, props: P}): Promise<any> => {
+        return openDialog(component, props)
     }
 
     return {

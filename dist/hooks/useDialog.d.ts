@@ -1,19 +1,15 @@
 import React from 'react';
-declare type ProviderProps = {
-    children: React.ReactNode;
-};
-export declare type DialogExtraProps<DialogResponse> = {
+export declare type DialogProps = {
     open: boolean;
-    onClose: (response?: DialogResponse) => void;
-    onCancel: (response?: DialogResponse) => void;
+    onClose: () => void;
+    onError: () => void;
 };
-export declare function DialogProvider<DialogResponse>(props: ProviderProps): JSX.Element;
-export declare const useDialog: <DialogResponse extends any>() => {
+export declare const DialogProvider: React.FC<{}>;
+export declare const useDialog: () => {
     dialog: {
         show: <P extends any>({ component, props }: {
-            component: React.FC<P & DialogExtraProps<DialogResponse>>;
+            component: React.FC<any>;
             props: P;
         }) => Promise<any>;
     };
 };
-export {};

@@ -8,7 +8,7 @@ declare type ProviderProps = {
 };
 export declare const AlertProvider: React.FC<ProviderProps>;
 export declare const useAlert: () => {
-    showAlert: {
+    alert: {
         success: (content: React.ReactNode, props?: MuiAlertProps | undefined) => void;
         error: (content: React.ReactNode, props?: MuiAlertProps | undefined) => void;
         warning: (content: React.ReactNode, props?: MuiAlertProps | undefined) => void;

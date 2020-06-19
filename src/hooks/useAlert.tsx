@@ -74,10 +74,10 @@ const Alert: React.FC<AlertProps> = () => {
     return (
         <Snackbar
             anchorOrigin={{ vertical: "top", horizontal: "right" }}
-            open={state.open}
             autoHideDuration={2000}
+            {...snackbarProps}
             onClose={onClose}
-            {...snackbarProps}>
+            open={state.open} >
             <MuiAlert {...alertProps} {...state.currentAlert.props} action={
                 <IconButton size="small" aria-label="close" color="inherit" onClick={onClose}>
                     <CloseIcon fontSize="small" />
@@ -110,7 +110,7 @@ export const useAlert = () => {
     }
 
     return {
-        showAlert: {
+        alert: {
             success: alertSuccess,
             error: alertError,
             warning: alertWarning,
