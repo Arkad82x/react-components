@@ -14,36 +14,37 @@ export const DialogProvider: React.FC<{}> = ({ children }) => {
     const [ state, setState ] = useState<{
         component: React.FC<any>,
         props: {},
-        open: boolean
+        open: boolean,
+        resolve: (response:any) => void,
+        reject: (error: any) => void
     }>({
         component: () => null,
         props: {},
-        open: false
+        open: false,
+        resolve: () => {},
+        reject: () => {} 
     })
 
-    const [ dialogCallbacks, setDialogCallbacks ] = useState<{resolve:(response:any) => void, reject: (error:any) => void}>({resolve: (response:any) => {}, reject: (error:any) => {}})
-
     const openDialog = (dialog: React.FC<any>, props: {}): Promise<any> => {
-        const promise = new Promise((resolve, reject) => {
-            setDialogCallbacks({ resolve, reject })
+        return new Promise((resolve, reject) => {
+            setState({
+                component: dialog,
+                props,
+                open:true,
+                resolve,
+                reject
+            })
         })
-
-        setState({
-            component: dialog,
-            props,
-            open:true
-        })
-        return promise
     }
 
     const onClose = (response: any) => {
-        dialogCallbacks.resolve(response)
-        setState({ ...state, open: false })
+        state.resolve(response)
+        setState({ ...state, open: false, resolve: () => {}, reject: () => {} })
     }
 
     const onError = (error: any) => {
-        dialogCallbacks.reject(error)
-        setState({ ...state, open: false })
+        state.reject(error)
+        setState({ ...state, open: false, resolve: () => {}, reject: () => {} })
     }
 
     const DialogComponent = state.component
