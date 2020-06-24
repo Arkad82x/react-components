@@ -4,6 +4,7 @@ import { AppBar, Toolbar, Typography, Paper, Tab, Tabs } from '@material-ui/core
 import ButtonView from './ButtonView/ButtonView'
 import HooksView from './demo/hooks/index'
 import TabPanel from './TabPanel';
+import './types/palette'
 
 function App() {
   const [currentTab, setCurrentTab] = React.useState(0)
@@ -24,12 +25,8 @@ function App() {
         </Tabs>
       </AppBar>
       <Paper style={{ padding: "16px" }}>
-        <TabPanel value={currentTab} index={0}>
-          <ButtonView />
-        </TabPanel>
-        <TabPanel value={currentTab} index={1}>
-          <HooksView />
-        </TabPanel>
+        { currentTab === 0 && <ButtonView /> }
+        { currentTab === 1 && <HooksView /> }
       </Paper>
     </>
   );

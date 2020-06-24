@@ -1,8 +1,8 @@
 import React, { useState, useContext } from 'react';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 import MuiButton from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Tooltip as Tooltip$1, useTheme, Snackbar, IconButton } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
 import { useField } from 'formik';
 import TextField from '@material-ui/core/TextField';
 import MuiAlert from '@material-ui/lab/Alert';
@@ -56,11 +56,58 @@ var Tooltip = withStyles(function (theme) { return ({
     },
 }); })(Tooltip$1);
 
+var useStyles = makeStyles(function (_a) {
+    var palette = _a.palette;
+    return ({
+        root: function (_a) {
+            var color = _a.color, variant = _a.variant;
+            return (variant === 'contained' ? {
+                color: palette[color].contrastText,
+                backgroundColor: palette[color].main,
+                border: "none",
+                "&:hover": {
+                    backgroundColor: palette[color].dark,
+                    color: palette[color].contrastText,
+                    border: "none",
+                    // Reset on touch devices, it doesn't add specificity
+                    "@media (hover: none)": {
+                        backgroundColor: palette[color].main
+                    }
+                }
+            } : variant === 'text' ? {
+                color: palette[color].main,
+                backgroundColor: "#ffffff",
+                border: "none",
+                "&:hover": {
+                    backgroundColor: "#ffffff",
+                    color: palette[color].dark,
+                    border: "none",
+                    "@media (hover: none)": {
+                        color: palette[color].main
+                    }
+                }
+            } : {
+                color: palette[color].main,
+                backgroundColor: "#ffffff",
+                border: "1px solid " + palette[color].main,
+                "&:hover": {
+                    color: palette[color].dark,
+                    backgroundColor: '#ffffff',
+                    border: "1px solid " + palette[color].dark,
+                    "@media (hover: none)": {
+                        color: palette[color].main
+                    }
+                }
+            });
+        }
+    });
+});
 var Button = React.forwardRef(function (_a, ref) {
-    var color = _a.color, children = _a.children, isLoading = _a.isLoading, disabled = _a.disabled, startIcon = _a.startIcon, tooltip = _a.tooltip, disabledTooltip = _a.disabledTooltip, props = __rest(_a, ["color", "children", "isLoading", "disabled", "startIcon", "tooltip", "disabledTooltip"]);
+    var _b = _a.color, color = _b === void 0 ? "primary" : _b, children = _a.children, _c = _a.isLoading, isLoading = _c === void 0 ? false : _c, _d = _a.disabled, disabled = _d === void 0 ? false : _d, _e = _a.startIcon, startIcon = _e === void 0 ? null : _e, _f = _a.tooltip, tooltip = _f === void 0 ? null : _f, _g = _a.disabledTooltip, disabledTooltip = _g === void 0 ? null : _g, variant = _a.variant, props = __rest(_a, ["color", "children", "isLoading", "disabled", "startIcon", "tooltip", "disabledTooltip", "variant"]);
     var palette = useTheme().palette;
-    var ButtonElement = React.createElement(MuiButton, __assign({ color: color, startIcon: isLoading ?
-            React.createElement(CircularProgress, { size: 20, style: { color: color && palette[color].contrastText } })
+    var classes = useStyles({ color: color, variant: variant });
+    var ButtonElement = React.createElement(MuiButton, __assign({ classes: classes, variant: variant, startIcon: isLoading ?
+            React.createElement(CircularProgress, { size: 20, style: { color: color && palette[color].main } })
             : startIcon, disabled: isLoading || disabled, ref: ref }, props), children);
     if (tooltip && disabled === false) {
         return (React.createElement(Tooltip, { enterDelay: 500, title: tooltip, arrow: true }, ButtonElement));
