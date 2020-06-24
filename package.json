@@ -1,6 +1,6 @@
 {
   "name": "@arkad82x/react-components",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "just a collection of react components for material-ui and formik",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
